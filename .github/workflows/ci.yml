@@ -3,26 +3,60 @@ name: CI - Pruebas de Integración Continua
 on:
   push:
     branches: 
-      - main 
-      - dev
+      # - main
+      - develop
     paths:
       - 'src/**'
       - 'package.json'
       - 'serverless.yml'
       - '.github/workflows/ci.yml'
       - '.github/workflows/cd.yml'
+
+permissions:
+  id-token: write
+  contents: read
       
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - env: dev
+            branch: /refs/heads/develop
+          - env: prod
+            branch: /refs/heads/main
+    environment: ${{ matrix.env }}
     steps:
       - name: Checkout repository
+        
         uses: actions/checkout@v3
+
       - name: Checkout code
         uses: actions/checkout@v3
+
       - name: Configurar Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+
       - name: Instalar dependencias
         run: npm install
+      
+      - name: Configurar credenciales de AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Seteo de variables de entorno en github env
+        run: |
+          echo "SERVERLESS_ACCESS_KEY=${{ secrets.SERVERLESS_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "ENVIRONMENT=${{ secrets.ENVIRONMENT }}" >> $GITHUB_ENV
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
+          echo "USER_DB=${{ secrets.USER_DB }}" >> $GITHUB_ENV
+          echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
+          echo "DATABASE=${{ secrets.DATABASE }}" >> $GITHUB_ENV
+      
+      - name: Desplegar con serverless Framework
+        run: npx serverless deploy --stage ${{ secrets.ENVIRONMENT }} --region ${{ secrets.AWS_REGION }} --verbose
