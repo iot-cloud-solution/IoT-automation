@@ -21,5 +21,8 @@
     "serverless": "^4.16.1",
     "serverless-offline": "^14.4.0",
     "serverless-python-requirements": "^6.1.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3"
   }
 }

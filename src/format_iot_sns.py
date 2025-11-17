@@ -1,8 +1,12 @@
 import json
 import urllib.request
 from datetime import datetime, timezone, timedelta
+from dotenv import load_dotenv
+import os
 
-SLACK_WEBHOOK_URL = ''
+load_dotenv()
+webhook_url = os.getenv("WEBHOOK_URL")
+SLACK_WEBHOOK_URL = 'https://app.slack.com/client/T08TJ6NQGM6/C090FSKGYPN'
 
 def convertir_epoch_a_fecha(epoch_ms):
     try:
