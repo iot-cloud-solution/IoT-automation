@@ -14,7 +14,7 @@ Repositorio de proyecto usam 2025
 ## Como correr la aplicacion
 1. Clonar el repositorio
      ```bash
-     https://github.com/iot-usam/usam-2025.git
+     https://github.com/iot-cloud-solution/IoT-automation.git
      ```
 >[!NOTE]
 >Debes estas en la carpeta raiz del proyecto
