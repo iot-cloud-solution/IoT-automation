@@ -1,0 +1,37 @@
+# Entornos y variables
+.env
+env/
+.venv/
+*.env
+
+# Node.js
+node_modules/
+package-lock.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+.Python
+pip-log.txt
+
+# Serverless
+.serverless/
+.sls-next/
+.sls-offline/
+
+# Empaquetado
+dist/
+build/
+*.zip
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Otros
+.DS_Store
