@@ -3,8 +3,8 @@ name: CI - Deploy IaC y aplicativo monitoreo granja
 on:
   push:
     branches: 
-      - main
-      - release
+      # - main
+      # - release
       - develop
     paths:
       - 'src/**'
@@ -50,7 +50,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
-        if: github.ref == matrix.env
+        if: github.ref == matrix.branch
 
       - name: Seteo de variables de entorno en github env
         run: |
@@ -60,7 +60,8 @@ jobs:
           echo "USER_DB=${{ secrets.USER_DB }}" >> $GITHUB_ENV
           echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
           echo "DATABASE=${{ secrets.DATABASE }}" >> $GITHUB_ENV
-        if: github.ref == matrix.env
+        if: github.ref == matrix.branch
       
       - name: Desplegar con serverless Framework
         run: npx serverless deploy --stage ${{ matrix.env }} --region ${{ vars.AWS_REGION }} --verbose
+        if: github.ref == matrix.branch
