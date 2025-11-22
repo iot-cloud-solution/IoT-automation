@@ -11,7 +11,7 @@ provider:
     USER_DB: ${env:USER_DB}
     PASSWORD: ${env:PASSWORD}
   deploymentBucket:
-    name: ${env:BUCKET}
+    name: '${env:BUCKET}'
 
 
 plugins:
