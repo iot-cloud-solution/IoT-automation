@@ -1,9 +1,10 @@
-name: CI - Pruebas de Integración Continua
+name: CI - Deploy IaC y aplicativo monitoreo granja
 
 on:
   push:
     branches: 
-      # - main
+      - main
+      - release
       - develop
     paths:
       - 'src/**'
@@ -17,19 +18,20 @@ permissions:
   contents: read
       
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
           - env: dev
-            branch: /refs/heads/develop
+            branch: refs/heads/develop
+          - env: release
+            branch: refs/heads/release
           - env: prod
-            branch: /refs/heads/main
+            branch: refs/heads/main
     environment: ${{ matrix.env }}
     steps:
       - name: Checkout repository
-        
         uses: actions/checkout@v3
 
       - name: Checkout code
@@ -48,6 +50,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
+        if: github.ref == matrix.env
 
       - name: Seteo de variables de entorno en github env
         run: |
@@ -57,6 +60,7 @@ jobs:
           echo "USER_DB=${{ secrets.USER_DB }}" >> $GITHUB_ENV
           echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
           echo "DATABASE=${{ secrets.DATABASE }}" >> $GITHUB_ENV
+        if: github.ref == matrix.env
       
       - name: Desplegar con serverless Framework
-        run: npx serverless deploy --stage ${{ secrets.ENVIRONMENT }} --region ${{ secrets.AWS_REGION }} --verbose
+        run: npx serverless deploy --stage ${{ matrix.env }} --region ${{ vars.AWS_REGION }} --verbose
