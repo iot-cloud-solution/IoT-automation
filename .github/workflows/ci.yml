@@ -55,7 +55,7 @@ jobs:
       - name: Seteo de variables de entorno en github env
         run: |
           echo "SERVERLESS_ACCESS_KEY=${{ secrets.SERVERLESS_ACCESS_KEY }}" >> $GITHUB_ENV
-          echo "ENVIRONMENT=${{ secrets.ENVIRONMENT }}" >> $GITHUB_ENV
+          echo "ENVIRONMENT=${{ vars.ENVIRONMENT }}" >> $GITHUB_ENV
           echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
           echo "USER_DB=${{ secrets.USER_DB }}" >> $GITHUB_ENV
           echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
@@ -63,5 +63,5 @@ jobs:
         if: github.ref == matrix.branch
       
       - name: Desplegar con serverless Framework
-        run: npx serverless deploy --stage ${{ matrix.env }} --region ${{ vars.AWS_REGION }} --verbose
+        run: npx serverless deploy --stage ${{ vars.ENVIRONMENT }} --region ${{ vars.AWS_REGION }} --verbose
         if: github.ref == matrix.branch
