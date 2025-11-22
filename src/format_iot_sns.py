@@ -5,8 +5,7 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-webhook_url = os.getenv("WEBHOOK_URL")
-SLACK_WEBHOOK_URL = 'https://app.slack.com/client/T08TJ6NQGM6/C090FSKGYPN'
+SLACK_WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 
 def convertir_epoch_a_fecha(epoch_ms):
     try:
