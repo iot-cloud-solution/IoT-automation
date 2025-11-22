@@ -60,6 +60,7 @@ jobs:
           echo "USER_DB=${{ secrets.USER_DB }}" >> $GITHUB_ENV
           echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
           echo "DATABASE=${{ secrets.DATABASE }}" >> $GITHUB_ENV
+          echo "BUCKET=${{ vars.BUCKET }}" >> $GITHUB_ENV
         if: github.ref == matrix.branch
       
       - name: Desplegar con serverless Framework
