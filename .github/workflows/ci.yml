@@ -3,8 +3,8 @@ name: CI - Deploy IaC y aplicativo monitoreo granja
 on:
   push:
     branches: 
-      - main
-      - release
+      # - main
+      # - release
       - develop
     paths:
       - 'src/**'
