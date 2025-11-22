@@ -13,6 +13,7 @@ provider:
   deploymentBucket:
     name: ${env:BUCKET}
 
+
 plugins:
     - serverless-python-requirements
 
