@@ -4,7 +4,7 @@ import time
 from decimal import Decimal
 
 dynamo_db = boto3.resource('dynamodb')
-d_table = dynamo_db.Table('iot_data_recursos')
+d_table = dynamo_db.Table('tabla-granja')
 
 def lambda_handler(event, context):
     try:
