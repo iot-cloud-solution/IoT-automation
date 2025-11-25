@@ -37,6 +37,29 @@ def decimal_a_nativo(obj):
     else:
         return obj
     
+def insertar_en_tabla(nombre_tabla, datos):
+    try:
+        cursor = conn.cursor()
+        query = f"""
+        INSERT INTO {nombre_tabla}(device_id, timestamp, temperature, humidity, light, nh3, no2, co, co2)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+        cursor.execute(query, (
+            datos["device_id"],
+            datos["timestamp"],
+            datos["temperature"],
+            datos["humidity"],
+            datos["light"],
+            datos["nh3"],
+            datos["no2"],
+            datos["co"],
+            datos["co2"]
+        ))
+        conn.commit()
+        print(f"✅ Datos insertados en {nombre_tabla}")
+    except Exception as e:
+        print(f"❌ Error al insertar en {nombre_tabla}: {e}")
+        conn.rollback()
 # def insert_data_in_db(table_name):
 #     try:
 #         print("Este es device uno sin ventilador")
@@ -53,91 +76,49 @@ def decimal_a_nativo(obj):
  
 def lambda_handler(event, context):
     try:
-      response = tabla.scan()
-      items = response.get("Items", [])
-  
-      resultados = []
-  
-      for item in items:
-        ts_original = item.get("timestamp")
-        ts_convertido = convertir_timestamp(ts_original)
-        item["timestamp"] = ts_convertido if ts_convertido else "ERROR"
-        item = decimal_a_nativo(item)
+        device_id = event.get("device_id")
+        timestamp = event.get("timestamp")
+        temperature = event.get("temperature")
+        humidity = event.get("humidity")
+        light = event.get("light")
+        nh3 = event.get("nh3")
+        no2 = event.get("no2")
+        co = event.get("co")
+        co2 = event.get("co2")
 
-        device_id = item.get("device_id")
-        timestamp = item.get("timestamp", "2025-01-01T00:00:00Z")
-        temperature = item.get("temperature", 0)
-        humidity = item.get("humidity", 0)
-        light = item.get("light", 0)
-        nh3 = item.get("NH3", 0)
-        no2 = item.get("NO2", 0)
-        co = item.get("CO", 0)
-        co2 = item.get("CO2", 0)
+        datos = {
+            "device_id": device_id,
+            "timestamp": timestamp,
+            "temperature": temperature,
+            "humidity": humidity,
+            "light": light,
+            "nh3": nh3,
+            "no2": no2,
+            "co": co,
+            "co2": co2
+        }
 
-        if device_id == "Sin_device1":
-            try:
-                print("Este es device uno sin ventilador")
-                cursor = conn.cursor()
-                query = """
-                INSERT INTO granja_device1(device_id, timestamp, temperature, humidity, light, nh3, no2, co, co2)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """
-                cursor.execute(query, (device_id, timestamp, temperature, humidity, light, nh3, no2, co, co2))
-                conn.commit()
-            except Exception as e:
-                print(f"Error al procesar los datos: {e}")
-                conn.rollback()
-
-        elif device_id == "Sin_device2":
-            try:
-                print("Este es device dos sin ventilador")
-                cursor = conn.cursor()
-                query = """
-                INSERT INTO granja_device2(device_id, timestamp, temperature, humidity, light, nh3, no2, co, co2)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """
-                cursor.execute(query, (device_id, timestamp, temperature, humidity, light, nh3, no2, co, co2))
-                conn.commit()
-            except Exception as e:
-                print(f"Error al procesar los datos: {e}")
-                conn.rollback()
+        if device_id == "Sin_device2":
+            print("Este es device dos sin ventilador")
+            insertar_en_tabla("granja_device2", datos)
 
         elif device_id == "Con_device3":
-            try:
-                print("Este es device uno con ventilador")
-                cursor = conn.cursor()
-                query = """
-                INSERT INTO granja_device3(device_id, timestamp, temperature, humidity, light, nh3, no2, co, co2)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """
-                cursor.execute(query, (device_id, timestamp, temperature, humidity, light, nh3, no2, co, co2))
-                conn.commit()
-            except Exception as e:
-                print(f"Error al procesar los datos: {e}")
-                conn.rollback()
-                
-        elif device_id == "Con_device4":
-            try:
-                print("Este es device dos con ventilador")
-                cursor = conn.cursor()
-                query = """
-                INSERT INTO granja_device4(device_id, timestamp, temperature, humidity, light, nh3, no2, co, co2)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """
-                cursor.execute(query, (device_id, timestamp, temperature, humidity, light, nh3, no2, co, co2))
-                conn.commit()
-            except Exception as e:
-                print(f"Error al procesar los datos: {e}")
-                conn.rollback()
+            print("Este es device tres con ventilador")
+            insertar_en_tabla("granja_device3", datos)
 
-      return {
-        "statusCode": 200,
-        "body": "Todos los datos fueron procesados",
-      }
-    
+        elif device_id == "Con_device4":
+            print("Este es device cuatro con ventilador")
+            insertar_en_tabla("granja_device4", datos)
+
+        return {
+            "statusCode": 200,
+            "body": "Todos los datos fueron insertados correctamente"
+        }
+
     except Exception as e:
         print(f"Error en lambda_handler: {e}")
         return {
             "statusCode": 500,
             "body": json.dumps({"error": str(e)})
         }
+    
