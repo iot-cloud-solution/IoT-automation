@@ -5,7 +5,7 @@ from decimal import Decimal
 from src.db.db_config import get_db_conexion
  
 dynamodb = boto3.resource('dynamodb')
-tabla = dynamodb.Table('iot_data_recursos')
+tabla = dynamodb.Table('tabla-granja')
 conn= get_db_conexion()
  
 def convertir_timestamp(timestamp_str):
@@ -60,19 +60,7 @@ def insertar_en_tabla(nombre_tabla, datos):
     except Exception as e:
         print(f"❌ Error al insertar en {nombre_tabla}: {e}")
         conn.rollback()
-# def insert_data_in_db(table_name):
-#     try:
-#         print("Este es device uno sin ventilador")
-#         cursor = conn.cursor()
-#         query = f"""
-#         INSERT INTO {table_name}(device_id, timestamp, temperature, humidity, light, nh3, no2, co, co2)
-#         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-#         """
-#         cursor.execute(query, (device_id, timestamp, temperature, humidity, light, nh3, no2, co, co2))
-#         conn.commit()
-#     except Exception as e:
-#         print(f"Error al procesar los datos: {e}")
-#         conn.rollback()
+
  
 def lambda_handler(event, context):
     try:
