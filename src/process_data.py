@@ -6,7 +6,6 @@ from src.db.db_config import get_db_conexion
  
 dynamodb = boto3.resource('dynamodb')
 tabla = dynamodb.Table('tabla-granja')
-conn= get_db_conexion()
  
 def convertir_timestamp(timestamp_str):
     try:
@@ -39,7 +38,9 @@ def decimal_a_nativo(obj):
     
 def insertar_en_tabla(nombre_tabla, datos):
     try:
+        conn= get_db_conexion()
         cursor = conn.cursor()
+        
         query = f"""
         INSERT INTO {nombre_tabla}(device_id, timestamp, temperature, humidity, light, nh3, no2, co, co2)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
