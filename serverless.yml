@@ -36,8 +36,8 @@ functions:
 
   process_data:
     handler: ${self:custom.handlePath}/process_data.lambda_handler
-    memorySize: 256
-    timeout: 60
+    memorySize: 1024
+    timeout: 120
     ephemeralStorageSize: 512
     name: process_data
     architecture: x86_64
