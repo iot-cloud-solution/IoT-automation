@@ -64,54 +64,54 @@ def insertar_en_tabla(nombre_tabla, datos):
 
  
 def lambda_handler(event, context):
-    try:
-        device_id = event.get("device_id")
-        timestamp = event.get("timestamp")
-        temperature = event.get("temperature")
-        humidity = event.get("humidity")
-        light = event.get("light")
-        nh3 = event.get("nh3")
-        no2 = event.get("no2")
-        co = event.get("co")
-        co2 = event.get("co2")
+    
+    print("🔍 Obtieniendo datos de DynamoDB...")
+    response = tabla.scan()
 
-        datos = {
-            "device_id": device_id,
-            "timestamp": timestamp,
-            "temperature": temperature,
-            "humidity": humidity,
-            "light": light,
-            "nh3": nh3,
-            "no2": no2,
-            "co": co,
-            "co2": co2
-        }
+    items = response.get("Items", [])
+    print(f"📦 Se encontraron {len(items)} items")
 
-        if device_id == "Sin_device1":
-            print("Este es device dos sin ventilador")
-            insertar_en_tabla("granja_device1", datos)
+    for item in items:
+      device_id = item.get("device_id")
+      timestamp = item.get("timestamp")
+      temperature = item.get("temperature")
+      humidity = item.get("humidity")
+      light = item.get("light")
+      nh3 = item.get("nh3")
+      no2 = item.get("no2")
+      co = item.get("co")
+      co2 = item.get("co2")
 
-        elif device_id == "Sin_device2":
-            print("Este es device tres con ventilador")
-            insertar_en_tabla("granja_device2", datos)
+      datos = {
+        "device_id": device_id,
+        "timestamp": timestamp,
+        "temperature": temperature,
+        "humidity": humidity,
+        "light": light,
+        "nh3": nh3,
+        "no2": no2,
+        "co": co,
+        "co2": co2
+      }
 
-        elif device_id == "Con_device3":
-            print("Este es device tres con ventilador")
-            insertar_en_tabla("granja_device3", datos)
+      if device_id == "Sin_device1":
+          print("Este es device dos sin ventilador")
+          insertar_en_tabla("granja_device1", datos)
 
-        elif device_id == "Con_device4":
-            print("Este es device cuatro con ventilador")
-            insertar_en_tabla("granja_device4", datos)
+      elif device_id == "Sin_device2":
+          print("Este es device tres con ventilador")
+          insertar_en_tabla("granja_device2", datos)
 
-        return {
-            "statusCode": 200,
-            "body": "Todos los datos fueron insertados correctamente"
-        }
+      elif device_id == "Con_device3":
+          print("Este es device tres con ventilador")
+          insertar_en_tabla("granja_device3", datos)
 
-    except Exception as e:
-        print(f"Error en lambda_handler: {e}")
-        return {
-            "statusCode": 500,
-            "body": json.dumps({"error": str(e)})
-        }
+      elif device_id == "Con_device4":
+          print("Este es device cuatro con ventilador")
+          insertar_en_tabla("granja_device4", datos)
+
+      return {
+          "statusCode": 200,
+          "body": "Todos los datos fueron insertados correctamente"
+      }
     
