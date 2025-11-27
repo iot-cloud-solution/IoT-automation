@@ -1,11 +1,12 @@
 import os
-from dotenv import load_dotenv
 import psycopg2
- 
-load_dotenv()
  
 def get_db_conexion():
   try:
+    print("HOST:", os.getenv("DB_HOST"))
+    print("DB:", os.getenv("DATABASE"))
+    print("USER:", os.getenv("USER_DB"))
+    
     conn = psycopg2.connect(
       host= os.getenv("DB_HOST"),
       database= os.getenv("DATABASE"),
@@ -15,5 +16,6 @@ def get_db_conexion():
     return conn
 
   except psycopg2.OperationalError as e:
-    return("Error al conectar con la db", e)
+    print("Error al conectar con la db", e)
+    return None
  
