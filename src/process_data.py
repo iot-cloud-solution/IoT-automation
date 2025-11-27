@@ -95,11 +95,11 @@ def lambda_handler(event, context):
       }
 
       if device_id == "Sin_device1":
-          print("Este es device dos sin ventilador")
+          print("Este es device uno sin ventilador")
           insertar_en_tabla("granja_device1", datos)
 
       elif device_id == "Sin_device2":
-          print("Este es device tres con ventilador")
+          print("Este es device dos sin ventilador")
           insertar_en_tabla("granja_device2", datos)
 
       elif device_id == "Con_device3":
