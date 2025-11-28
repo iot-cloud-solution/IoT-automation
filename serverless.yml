@@ -10,11 +10,7 @@ provider:
     DATABASE: ${env:DATABASE}
     USER_DB: ${env:USER_DB}
     PASSWORD: ${env:PASSWORD}
-  vpc:
-    securityGroupIds:
-      - sg-0d62aed3e4ae61ac3
-    subnetIds:
-      - subnet-008fa959e59154488
+  
   deploymentBucket:
     name: '${env:BUCKET}'
 
