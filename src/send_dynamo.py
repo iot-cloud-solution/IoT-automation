@@ -8,7 +8,9 @@ d_table = dynamo_db.Table('tabla-granja')
 
 def lambda_handler(event, context):
     try:
-        payload = event
+        print("EVENT RAW:", json.dumps(event))
+        payload = event  # IoT envía el JSON del mensaje directamente
+
         unique_id = int(time.time())
         payload['id'] = unique_id
         payload['timestamp'] = str(payload['timestamp'])
