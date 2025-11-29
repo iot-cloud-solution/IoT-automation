@@ -83,10 +83,10 @@ def lambda_handler(event, context):
       temperature = item.get("temperature", 0)
       humidity = item.get("humidity", 0)
       light = item.get("light", 0)
-      nh3 = item.get("nh3", 0)
-      no2 = item.get("no2", 0)
-      co = item.get("co", 0)
-      co2 = item.get("co2", 0)
+      nh3 = item.get("NH3", 0)
+      no2 = item.get("NO2", 0)
+      co = item.get("CO", 0)
+      co2 = item.get("CO2", 0)
 
       datos = {
         "device_id": device_id,
