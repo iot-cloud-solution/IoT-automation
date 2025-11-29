@@ -38,7 +38,7 @@ functions:
     handler: ${self:custom.handlePath}/process_data.lambda_handler
     events:
       - schedule:
-          rate: rate(1 minutes)
+          rate: rate(2 minutes)
           enabled: true
     memorySize: 256
     timeout: 600
