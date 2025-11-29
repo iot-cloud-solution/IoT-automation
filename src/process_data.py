@@ -116,8 +116,8 @@ def lambda_handler(event, context):
           print("Este es device cuatro con ventilador")
           insertar_en_tabla("granja_device4", datos)
 
-      return {
-          "statusCode": 200,
-          "body": "Todos los datos fueron insertados correctamente"
-      }
+    return {
+      "statusCode": 200,
+      "body": "Todos los datos fueron insertados correctamente"
+    }
     
