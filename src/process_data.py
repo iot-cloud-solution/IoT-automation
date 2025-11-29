@@ -72,15 +72,21 @@ def lambda_handler(event, context):
     print(f"📦 Se encontraron {len(items)} items")
 
     for item in items:
+      
+      ts_original = item.get("timestamp")
+      ts_convertido = convertir_timestamp(ts_original)
+      item["timestamp"] = ts_convertido if ts_convertido else "ERROR"
+      item = decimal_a_nativo(item)
+
       device_id = item.get("device_id")
-      timestamp = item.get("timestamp")
-      temperature = item.get("temperature")
-      humidity = item.get("humidity")
-      light = item.get("light")
-      nh3 = item.get("nh3")
-      no2 = item.get("no2")
-      co = item.get("co")
-      co2 = item.get("co2")
+      timestamp = item.get("timestamp", "2025-01-01T00:00:00Z")
+      temperature = item.get("temperature", 0)
+      humidity = item.get("humidity", 0)
+      light = item.get("light", 0)
+      nh3 = item.get("nh3", 0)
+      no2 = item.get("no2", 0)
+      co = item.get("co", 0)
+      co2 = item.get("co2", 0)
 
       datos = {
         "device_id": device_id,
