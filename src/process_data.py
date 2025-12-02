@@ -44,7 +44,7 @@ def insertar_en_tabla(nombre_tabla, datos):
         query = f"""
         INSERT INTO {nombre_tabla}(device_id, timestamp, temperature, humidity, light, nh3, no2, co, co2)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-        ON CONNECT (device_id, timestamp) DO NOTHING
+        ON CONFLICT (device_id, timestamp) DO NOTHING;
         """
         cursor.execute(query, (
             datos["device_id"],
