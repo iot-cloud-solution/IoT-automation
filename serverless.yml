@@ -36,10 +36,10 @@ functions:
 
   process_data:
     handler: ${self:custom.handlePath}/process_data.lambda_handler
-    # events:
-    #   - schedule:
-    #       rate: rate(2 minutes)
-    #       enabled: true
+    events:
+      - schedule:
+          rate: rate(2 minutes)
+          enabled: true
     memorySize: 256
     timeout: 600
     ephemeralStorageSize: 512
