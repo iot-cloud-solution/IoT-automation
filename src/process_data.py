@@ -44,6 +44,7 @@ def insertar_en_tabla(nombre_tabla, datos):
         query = f"""
         INSERT INTO {nombre_tabla}(device_id, timestamp, temperature, humidity, light, nh3, no2, co, co2)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (device_id, timestamp) DO NOTHING;
         """
         cursor.execute(query, (
             datos["device_id"],
@@ -66,10 +67,13 @@ def insertar_en_tabla(nombre_tabla, datos):
 def lambda_handler(event, context):
     
     print("🔍 Obtieniendo datos de DynamoDB...")
+    items = []
     response = tabla.scan()
 
-    items = response.get("Items", [])
-    print(f"📦 Se encontraron {len(items)} items")
+    items.extend(response.get('Items', []))
+    while 'LastEvaluatedKey' in response:
+      response = tabla.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
+      items.extend(response.get('Items', []))
 
     for item in items:
       
