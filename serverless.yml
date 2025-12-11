@@ -5,11 +5,7 @@ provider:
   runtime: python3.12
   region: us-east-2
   environment:
-    DB_HOST: ${env:DB_HOST}
-    ENVIRONMENT: ${env:ENVIRONMENT}
-    DATABASE: ${env:DATABASE}
-    USER_DB: ${env:USER_DB}
-    PASSWORD: ${env:PASSWORD}
+    SECRET_NAME: ${env:SECRET_NAME}
   vpc:
     securityGroupIds:
       - sg-0d62aed3e4ae61ac3

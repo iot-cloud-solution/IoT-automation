@@ -56,10 +56,7 @@ jobs:
         run: |
           echo "SERVERLESS_ACCESS_KEY=${{ secrets.SERVERLESS_ACCESS_KEY }}" >> $GITHUB_ENV
           echo "ENVIRONMENT=${{ vars.ENVIRONMENT }}" >> $GITHUB_ENV
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
-          echo "USER_DB=${{ secrets.USER_DB }}" >> $GITHUB_ENV
-          echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
-          echo "DATABASE=${{ secrets.DATABASE }}" >> $GITHUB_ENV
+          echo "SECRET_NAME=${{ secrets.SECRET_NAME }}" >> $GITHUB_ENV
           echo "BUCKET=${{ vars.BUCKET }}" >> $GITHUB_ENV
         if: github.ref == matrix.branch
       
