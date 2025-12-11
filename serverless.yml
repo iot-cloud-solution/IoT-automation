@@ -41,7 +41,7 @@ functions:
           rate: rate(2 minutes)
           enabled: true
     memorySize: 256
-    timeout: 600
+    timeout: 10
     ephemeralStorageSize: 512
     name: process_data
     architecture: x86_64
