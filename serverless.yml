@@ -6,6 +6,7 @@ provider:
   region: us-east-2
   environment:
     SECRET_NAME: ${env:SECRET_NAME}
+    TOPIC_ARN: arn:aws:sns:us-east-2:445985103001:alertas_promedios
   vpc:
     securityGroupIds:
       - sg-0d62aed3e4ae61ac3
@@ -51,6 +52,28 @@ functions:
     name: average_data
     architecture: x86_64
     description: Calcular el promedio de datos y almacenarlo en RDS
+    
+  average_daily:
+    handler: ${self:custom.handlePath}/average_daily.lambda_handler
+    memorySize: 256
+    timeout: 10
+    ephemeralStorageSize: 512
+    name: average_daily
+    architecture: x86_64
+    description: Calcular el promedio de datos diario
+    events:
+      - schedule: cron(0 6 * * ? *)   # 00:00 hora El Salvador (UTC-6)
+
+  average_weekly:
+    handler: ${self:custom.handlePath}/average_weekly.lambda_handler
+    memorySize: 256
+    timeout: 10
+    ephemeralStorageSize: 512
+    name: average_weekly
+    architecture: x86_64
+    description: Calcular el promedio de datos semanal
+    events:
+      - schedule: cron(0 6 ? * MON *)  # lunes 00:00 hora El Salvador
 
   send_dynamo:
     handler: ${self:custom.handlePath}/send_dynamo.lambda_handler
@@ -87,3 +110,12 @@ functions:
     name: SendMessageCloudWatchToSlack
     architecture: x86_64
     description: Formatea el mensaje de SNS de CloudWatch para enviar a Slack
+
+  send_sns_alerts:
+    handler: ${self:custom.handlePath}/send_sns_alerts.lambda_handler
+    memorySize: 256
+    timeout: 10
+    ephemeralStorageSize: 512
+    name: send_sns_alerts
+    architecture: x86_64
+    description: enviar alertas por sns
